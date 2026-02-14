@@ -1,0 +1,143 @@
+% filepath: c:\Users\j.noel\Desktop\EPHEC\devIII-tp\TP02\REPORT_TEMPLATE.tex
+% Compiler: pdflatex REPORT_TEMPLATE.tex (ou xelatex)
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amssymb}
+
+\geometry{margin=2.5cm}
+\lstset{
+  language=TypeScript,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  breaklines=true
+}
+
+\title{T2112 - Devoir 1 \\Rapport}
+\author{Nom : Charlier Thomas }
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+\section*{Résumé}
+
+\textit{Dans ce devoir, j'ai ajouté une page de connexion permettant de vérifier un couple username/password avant d'accéder à la gestion des utilisateurs. La page permet d'ajouter et de supprimer des utilisateurs via un formulaire HTML, en interagissant avec l'API Express et la base de données SQLite.}
+
+
+
+
+
+
+\section{Objectifs (ce que je souhaite atteindre)}
+\textit{
+- Créer une page de connexion avant la gestion des utilisateurs.
+- Vérifier le couple username/password via POST /api/login.
+- Ajouter de nouveaux utilisateurs dans la base de données avec les champs : nom, prénom, username, password. Sans sécurité sur les password
+- Supprimer des utilisateurs via DELETE /api/users/:id.
+- Afficher la liste des utilisateurs avec GET /api/users.
+- Rediriger l'utilisateur vers la page de gestion uniquement après connexion réussie.
+}
+
+
+
+
+
+\section{Stratégie et raisonnement}
+\textit{
+- J'ai choisi Express pour créer l'API backend et SQLite via Sequelize pour la base de données, pour garder la simplicité et la portabilité.
+- Séparation claire du code : models/user.ts pour le modèle, services/userService.ts pour la logique métier, routes/userRoutes.ts pour les endpoints.
+- Frontend minimal avec HTML + JavaScript pour interagir avec l'API via fetch.
+- Redirection simple après login pour limiter l'accès à la gestion des utilisateurs.
+- Pas de sécurité sur les mots de passe pour ce TP, mais validation côté serveur et côté client.
+}
+
+
+
+
+
+\section{Réalisation (ce que j'ai réellement atteint et comment)}
+\subsection{Fonctionnalités ajoutées}
+\subsection{Fonctionnalités ajoutées}
+\textit{
+- Page de login avec vérification du couple username/password.
+- Endpoint POST /api/login pour la connexion.
+- Endpoint GET /api/users pour lister les utilisateurs.
+- Endpoint POST /api/users pour ajouter un utilisateur.
+- Endpoint DELETE /api/users/:id pour supprimer un utilisateur.
+- Formulaire HTML pour ajouter des utilisateurs et bouton de suppression.
+- Redirection vers la page de gestion après login réussi.
+- Base de données synchronisée automatiquement avec Sequelize.
+}
+
+
+
+
+
+\subsection{Exemple de code}
+\textit{
+L'endpoint \texttt{/login} est un endpoint POST qui reçoit en corps de requête les champs \texttt{username} et \texttt{password}. 
+La logique est la suivante : 
+\begin{enumerate}
+  \item Le serveur vérifie que les deux champs ne sont pas vides. Si l'un d'eux est vide, une réponse HTTP 400 est renvoyée avec un message d'erreur.
+  \item Si les champs sont renseignés, le serveur recherche dans la base de données un utilisateur correspondant au couple \texttt{username/password}.
+  \item Si un utilisateur est trouvé, le serveur renvoie un code HTTP 200 avec un message de confirmation de connexion réussie.
+  \item Si aucun utilisateur ne correspond au couple fourni, le serveur renvoie un code HTTP 404 avec un message indiquant "Utilisateur inconnu".
+  \item En cas d'erreur interne (ex : problème de base de données), le serveur renvoie un code HTTP 500 avec un message d'erreur générique.
+\end{enumerate}
+Cette approche permet de gérer correctement la validation des données, la réponse en cas de succès ou d'erreur, et fournit un retour clair au client.
+}\begin{lstlisting}[caption=Exemple d'endpoint ajouté]
+router.post("/login", async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ message: "Nom et mot de passe requis" });
+
+  try {
+    const user = await User.findOne({ where: { username, password } });
+    if (!user) return res.status(404).json({ message: "Utilisateur inconnu" });
+    res.status(200).json({ message: "Connexion réussie" });
+  } catch (err) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+\end{lstlisting}
+
+
+
+
+
+
+
+\subsection{Captures d'écran}
+Incluez les images dans le dossier \texttt{screenshots/} puis référencez-les ici ou référencez des annexes (figure \ref{abc}) :
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{screenshots/get-users.png}
+  \caption{Résultat du test (exemple)}
+\end{figure}
+
+
+
+
+
+\section{Annexes}
+\textit{Ajoutez ici toutes les annexes, pour référencer, utilisez la balise ref avec le nom du label associé \ref{ann1}}
+
+\subsection{EXEMPLE : Code source - routes/user.ts}
+\label{ann1}
+
+
+
+\subsection{EXEMPLE : Screenshot - ABC}
+\label{abc}
+
+
+
+\end{document}

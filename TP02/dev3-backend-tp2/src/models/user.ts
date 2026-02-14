@@ -5,7 +5,6 @@ class User extends Model {}
 
 User.init(
   {
-    // Model attributes are defined here
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
