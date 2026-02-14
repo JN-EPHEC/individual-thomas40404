@@ -2,6 +2,7 @@
 import { Router } from "express";
 import type { Request, Response } from "express";
 import User from "../models/user.js";
+
 const router = Router();
 
 // GET /api/users
@@ -18,11 +19,14 @@ router.get("/users", async (req: Request, res: Response) => {
 // POST /api/users - créer un utilisateur
 router.post("/users", async (req: Request, res: Response) => {
   try {
-    const { nom, prenom } = req.body;
-    if (!nom) {
-      return res.status(400).json({ message: "Le champ 'nom' est requis" });
+    const { nom, prenom, username,password } = req.body;
+    if (!username) {
+      return res.status(400).json({ message: "Le champ 'username' est requis" });
     }
-    const newUser = await User.create({ nom, prenom });
+    if (!password) {
+      return res.status(400).json({ message: "Le champ 'password' est requis" });
+    }
+    const newUser = await User.create({ nom, prenom, username,password });
     res.status(201).json(newUser);
   } catch (error) {
     console.error(error);
@@ -45,4 +49,16 @@ router.delete("/users/:id", async (req: Request, res: Response) => {
   }
 });
 
+router.post("/login", async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ message: "Nom et mot de passe requis" });
+
+  try {
+    const user = await User.findOne({ where: { username, password } });
+    if (!user) return res.status(404).json({ message: "Utilisateur inconnu" });
+    res.status(200).json({ message: "Connexion réussie" });
+  } catch (err) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
 export default router;

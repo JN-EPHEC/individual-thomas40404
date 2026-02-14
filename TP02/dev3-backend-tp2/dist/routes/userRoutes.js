@@ -16,11 +16,14 @@ router.get("/users", async (req, res) => {
 // POST /api/users - créer un utilisateur
 router.post("/users", async (req, res) => {
     try {
-        const { nom, prenom } = req.body;
-        if (!nom) {
-            return res.status(400).json({ message: "Le champ 'nom' est requis" });
+        const { nom, prenom, username, password } = req.body;
+        if (!username) {
+            return res.status(400).json({ message: "Le champ 'username' est requis" });
         }
-        const newUser = await User.create({ nom, prenom });
+        if (!password) {
+            return res.status(400).json({ message: "Le champ 'password' est requis" });
+        }
+        const newUser = await User.create({ nom, prenom, username, password });
         res.status(201).json(newUser);
     }
     catch (error) {
@@ -41,6 +44,20 @@ router.delete("/users/:id", async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: "Erreur lors de la suppression de l'utilisateur" });
+    }
+});
+router.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password)
+        return res.status(400).json({ message: "Nom et mot de passe requis" });
+    try {
+        const user = await User.findOne({ where: { username, password } });
+        if (!user)
+            return res.status(404).json({ message: "Utilisateur inconnu" });
+        res.status(200).json({ message: "Connexion réussie" });
+    }
+    catch (err) {
+        res.status(500).json({ message: "Erreur serveur" });
     }
 });
 export default router;
