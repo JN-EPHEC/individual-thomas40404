@@ -7,53 +7,32 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { requestLogger } from "./middlewares/logger.js";
 import { errorHandler } from './middlewares/errorHandler.js';
+import {checkIdParam} from './middlewares/check.js';
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 import cors from 'cors';
 
-app.use(cors()); // Autorise tout le monde (acceptable uniquement en dev)
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-interface Etudiant {
-    id: number;
-    nom: string;
-    prenom: string;
-}
-
-const etudiants: Etudiant[] = [
-    { id: 1, nom: "Dupont", prenom: "Jean" },
-    { id: 2, nom: "Martin", prenom: "Sophie" },
-    { id: 3, nom: "Doe", prenom: "John" },
-];
-
 const app = express();
 const PORT = 3000;
+
+app.use(cors()); // Autorise tout le monde (acceptable uniquement en dev)
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(requestLogger);
+
+app.use(checkIdParam)
 
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/users', userRoutes);
-/*
-app.get('/api/data', (req: Request, res: Response) => {
-  res.json(etudiants);
-});
 
-app.get('/api/hello/:name', (req: Request<{ name: string }>, res: Response) => {
-  const name = req.params.name; 
-  res.json({
-    message: `Bonjour ${name}`,
-    timestamp: new Date().toISOString(),
-  });
-});
-*/
 sequelize.authenticate()
   .then(() => console.log('Connexion à la DB réussie !'))
   .catch((err: unknown) => {
