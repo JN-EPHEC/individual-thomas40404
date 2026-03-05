@@ -13,3 +13,4 @@ database.sqlite
 *.zip
 *.tex
 *Screen*
+*coverage*
