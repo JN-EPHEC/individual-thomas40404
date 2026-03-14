@@ -9,8 +9,10 @@ node_modules/
 *copie*
 package-lock.json
 database.sqlite
-*.png
-*.zip
-*.tex
+.png
+.zip
+.tex
 *Screen*
 *coverage*
+.env
+database.sqlite
