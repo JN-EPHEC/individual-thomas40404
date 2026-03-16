@@ -1,7 +1,6 @@
 import express from 'express';
 import type { Request, Response } from 'express';
 import userRoutes from './routes/userRoutes.js';
-import sequelize from './config/database.js';
 import User from './models/User.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -11,11 +10,12 @@ import {checkIdParam} from './middlewares/check.js';
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.js";
 import cors from 'cors';
+import sequelize from './config/database';
 
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = 3000;
 
@@ -29,7 +29,7 @@ app.use(checkIdParam)
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, '../public')));
+//app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/users', userRoutes);
 

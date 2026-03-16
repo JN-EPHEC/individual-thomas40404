@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "postgres.onxdgcvmsygkxnwpdryn",
     "password": "fygbis-womce0-jectuR",
     "database": "postgres",
-    "host": "db.onxdgcvmsygkxnwpdryn.supabase.co",
+    "host": "aws-1-eu-west-1.pooler.supabase.com",
     "port": 5432,
     "dialect": "postgres",
     "dialectOptions": {
