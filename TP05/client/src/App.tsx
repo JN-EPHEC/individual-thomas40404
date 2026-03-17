@@ -1,4 +1,5 @@
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
 import './App.css';
 // Interface représentant un utilisateur
 interface User {
@@ -75,7 +76,7 @@ function App() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/users");
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users`);
       if (!response.ok) throw new Error("Erreur lors de la récupération des utilisateurs");
       const data: User[] = await response.json();
       setUsers(data);
@@ -97,8 +98,7 @@ function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/users", {
-        method: "POST",
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {      method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nom, prenom }),
       });
@@ -117,7 +117,7 @@ function App() {
 
   const handleDeleteUser = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Erreur lors de la suppression de l'utilisateur");
