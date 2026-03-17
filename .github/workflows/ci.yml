@@ -13,7 +13,7 @@ jobs:
           node-version: '18.x'
       - name: Install dependencies
         run: npm install
-        working-directory: ./server
+        working-directory: ./TP05/server
       - name: Run unit tests
         run: npm test
-        working-directory: ./server
+        working-directory: ./TP05/server
