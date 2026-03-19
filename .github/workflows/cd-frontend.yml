@@ -1,4 +1,4 @@
-cat TP05/server/package.json | grep -A5 '"scripts"'name: Continuous Deployment - Frontend
+name: Continuous Deployment - Frontend
 
 on:
   push:
